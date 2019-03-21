@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2019 at 06:46 PM
+-- Generation Time: Mar 20, 2019 at 01:45 PM
 -- Server version: 5.6.15-log
 -- PHP Version: 5.5.8
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `booking` (
   `bookingID` int(11) NOT NULL,
-  `memberNo` int(11) NOT NULL,
+  `memberID` int(11) NOT NULL,
   `performanceID` int(11) NOT NULL,
   `seats` int(11) NOT NULL,
   PRIMARY KEY (`bookingID`)
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`bookingID`, `memberNo`, `performanceID`, `seats`) VALUES
-(0, 0, 0, 0);
+INSERT INTO `booking` (`bookingID`, `memberID`, `performanceID`, `seats`) VALUES
+(1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -48,13 +48,20 @@ INSERT INTO `booking` (`bookingID`, `memberNo`, `performanceID`, `seats`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `cinema` (
-  `cinemaID` int(11) NOT NULL AUTO_INCREMENT,
-  `cinemaName` int(11) NOT NULL,
-  `location` int(11) NOT NULL,
-  `address` int(11) NOT NULL,
-  `cinemaManager` int(11) NOT NULL,
+  `cinemaID` int(11) NOT NULL,
+  `cinemaName` varchar(20) NOT NULL,
+  `location` varchar(50) NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `cinemaManager` varchar(50) NOT NULL,
   PRIMARY KEY (`cinemaID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cinema`
+--
+
+INSERT INTO `cinema` (`cinemaID`, `cinemaName`, `location`, `address`, `cinemaManager`) VALUES
+(1, 'MICE', 'Hatfield', 'akdmkd', 'bob');
 
 -- --------------------------------------------------------
 
@@ -94,10 +101,17 @@ CREATE TABLE IF NOT EXISTS `film` (
   `filmName` varchar(50) NOT NULL,
   `director` varchar(30) NOT NULL,
   `releaseYear` date NOT NULL,
-  PRIMARY KEY (`filmName`),
+  PRIMARY KEY (`filmID`),
   UNIQUE KEY `filmID` (`filmID`,`filmName`,`director`,`releaseYear`),
   UNIQUE KEY `filmID_2` (`filmID`,`filmName`,`director`,`releaseYear`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `film`
+--
+
+INSERT INTO `film` (`filmID`, `filmName`, `director`, `releaseYear`) VALUES
+(1, 'Captain Marvel', 'Stan Lee', '2019-03-22');
 
 -- --------------------------------------------------------
 
@@ -133,12 +147,20 @@ INSERT INTO `items` (`itemID`, `itemDesc`) VALUES
 CREATE TABLE IF NOT EXISTS `members` (
   `memberID` int(8) NOT NULL,
   `Title` enum('Mr','Mrs','Ms') NOT NULL,
-  `memberName` varchar(30) NOT NULL,
+  `memberFirstName` varchar(30) NOT NULL,
+  `memberLastName` varchar(50) NOT NULL,
   `memberStatus` enum('Active','Lapsed','Cancelled') NOT NULL,
   `dateJoined` date NOT NULL,
   PRIMARY KEY (`memberID`),
   UNIQUE KEY `memberID` (`memberID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `members`
+--
+
+INSERT INTO `members` (`memberID`, `Title`, `memberFirstName`, `memberLastName`, `memberStatus`, `dateJoined`) VALUES
+(1, 'Mr', 'Arudson', 'Thavarajah', 'Lapsed', '2019-03-12');
 
 -- --------------------------------------------------------
 
@@ -201,10 +223,17 @@ CREATE TABLE IF NOT EXISTS `performance` (
   `performanceID` int(11) NOT NULL,
   `filmID` int(11) NOT NULL,
   `screenNo` int(11) NOT NULL,
-  `performDate` int(11) NOT NULL,
+  `performDate` date NOT NULL,
   `seatsRemain` int(11) NOT NULL,
   PRIMARY KEY (`performanceID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `performance`
+--
+
+INSERT INTO `performance` (`performanceID`, `filmID`, `screenNo`, `performDate`, `seatsRemain`) VALUES
+(1, 1, 1, '2019-03-21', 10);
 
 -- --------------------------------------------------------
 
@@ -213,12 +242,19 @@ CREATE TABLE IF NOT EXISTS `performance` (
 --
 
 CREATE TABLE IF NOT EXISTS `screen` (
-  `cinemaID` int(11) NOT NULL,
   `screenNo` int(11) NOT NULL,
+  `cinemaID` int(11) NOT NULL,
   `seats` int(4) NOT NULL,
   `seatPrice` int(6) NOT NULL,
   PRIMARY KEY (`screenNo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `screen`
+--
+
+INSERT INTO `screen` (`screenNo`, `cinemaID`, `seats`, `seatPrice`) VALUES
+(1, 1, 10, 25);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
