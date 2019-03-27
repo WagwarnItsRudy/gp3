@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2019 at 01:45 PM
+-- Generation Time: Mar 27, 2019 at 04:33 PM
 -- Server version: 5.6.15-log
 -- PHP Version: 5.5.8
 
@@ -34,13 +34,6 @@ CREATE TABLE IF NOT EXISTS `booking` (
   PRIMARY KEY (`bookingID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`bookingID`, `memberID`, `performanceID`, `seats`) VALUES
-(1, 1, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -61,7 +54,8 @@ CREATE TABLE IF NOT EXISTS `cinema` (
 --
 
 INSERT INTO `cinema` (`cinemaID`, `cinemaName`, `location`, `address`, `cinemaManager`) VALUES
-(1, 'MICE', 'Hatfield', 'akdmkd', 'bob');
+(1, 'MICE', 'Hatfield', 'akdmkd', 'bob'),
+(2, 'MICE', 'Hatfield', 'akdmkd', 'bob');
 
 -- --------------------------------------------------------
 
@@ -99,19 +93,11 @@ INSERT INTO `customers` (`custID`, `custName`, `custAddress`, `custTown`, `custP
 CREATE TABLE IF NOT EXISTS `film` (
   `filmID` int(10) NOT NULL,
   `filmName` varchar(50) NOT NULL,
-  `director` varchar(30) NOT NULL,
-  `releaseYear` date NOT NULL,
+  `director` varchar(50) NOT NULL,
+  `dateofrelease` int(11) NOT NULL,
   PRIMARY KEY (`filmID`),
-  UNIQUE KEY `filmID` (`filmID`,`filmName`,`director`,`releaseYear`),
-  UNIQUE KEY `filmID_2` (`filmID`,`filmName`,`director`,`releaseYear`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `film`
---
-
-INSERT INTO `film` (`filmID`, `filmName`, `director`, `releaseYear`) VALUES
-(1, 'Captain Marvel', 'Stan Lee', '2019-03-22');
+  UNIQUE KEY `filmName` (`filmName`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -153,14 +139,15 @@ CREATE TABLE IF NOT EXISTS `members` (
   `dateJoined` date NOT NULL,
   PRIMARY KEY (`memberID`),
   UNIQUE KEY `memberID` (`memberID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `members`
 --
 
 INSERT INTO `members` (`memberID`, `Title`, `memberFirstName`, `memberLastName`, `memberStatus`, `dateJoined`) VALUES
-(1, 'Mr', 'Arudson', 'Thavarajah', 'Lapsed', '2019-03-12');
+(1, 'Mr', 'Arudson', 'Thavarajah', 'Lapsed', '2019-03-12'),
+(2, 'Mr', 'drotson', 'thev', 'Active', '2019-03-12');
 
 -- --------------------------------------------------------
 
@@ -222,18 +209,19 @@ INSERT INTO `order_items` (`invoice_no`, `item_id`, `itemQty`, `itemPrice`) VALU
 CREATE TABLE IF NOT EXISTS `performance` (
   `performanceID` int(11) NOT NULL,
   `filmID` int(11) NOT NULL,
+  `filmName` varchar(50) NOT NULL,
   `screenNo` int(11) NOT NULL,
   `performDate` date NOT NULL,
-  `seatsRemain` int(11) NOT NULL,
-  PRIMARY KEY (`performanceID`)
+  PRIMARY KEY (`performanceID`),
+  UNIQUE KEY `performanceID` (`performanceID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `performance`
 --
 
-INSERT INTO `performance` (`performanceID`, `filmID`, `screenNo`, `performDate`, `seatsRemain`) VALUES
-(1, 1, 1, '2019-03-21', 10);
+INSERT INTO `performance` (`performanceID`, `filmID`, `filmName`, `screenNo`, `performDate`) VALUES
+(1, 1, '', 1, '2019-03-11');
 
 -- --------------------------------------------------------
 
@@ -242,19 +230,23 @@ INSERT INTO `performance` (`performanceID`, `filmID`, `screenNo`, `performDate`,
 --
 
 CREATE TABLE IF NOT EXISTS `screen` (
-  `screenNo` int(11) NOT NULL,
   `cinemaID` int(11) NOT NULL,
+  `screenNo` enum('1','2','3','4','5') NOT NULL,
   `seats` int(4) NOT NULL,
   `seatPrice` int(6) NOT NULL,
-  PRIMARY KEY (`screenNo`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`cinemaID`,`screenNo`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `screen`
 --
 
-INSERT INTO `screen` (`screenNo`, `cinemaID`, `seats`, `seatPrice`) VALUES
-(1, 1, 10, 25);
+INSERT INTO `screen` (`cinemaID`, `screenNo`, `seats`, `seatPrice`) VALUES
+(1, '1', 10, 10),
+(1, '2', 10, 15),
+(1, '3', 15, 15),
+(1, '4', 10, 15),
+(1, '5', 20, 15);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
